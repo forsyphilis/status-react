@@ -26,8 +26,7 @@ Command.prototype.create = function (com) {
     this.title = com.title;
     this.description = com.description;
     this.handler = com.handler;
-    this["has-handler"] = com.handler != null;
-    this["registered-only"] = com.registeredOnly;
+    this["has-handler"] = com.handler !== null;
     this.validator = com.validator;
     this.color = com.color;
     this.icon = com.icon;
@@ -41,6 +40,13 @@ Command.prototype.create = function (com) {
     this["execute-immediately?"] = com.executeImmediately;
     this["sequential-params"] = com.sequentialParams;
     this["hide-send-button"] = com.hideSendButton;
+
+    // scope
+    this["scope"] = {};
+    this["scope"]["registered-only?"] = com["scope"] != null && com["scope"]["registeredOnly"] === true;
+    this["scope"]["personal-chats?"] = com["scope"] == null || com["scope"]["personalChats"] === true;
+    this["scope"]["group-chats?"] = com["scope"] == null || com["scope"]["groupChats"] === true;
+
     this.addToCatalog();
 
     return this;

@@ -455,7 +455,9 @@ function phoneSuggestions(params, context) {
 
 var phoneConfig = {
     name: "phone",
-    registeredOnly: true,
+    scope: {
+        registeredOnly: true
+    },
     icon: "phone_white",
     color: "#5bb2a2",
     title: I18n.t('phone_title'),
@@ -540,7 +542,9 @@ status.command({
     title: I18n.t('faucet_title'),
     description: I18n.t('faucet_description'),
     color: "#7099e6",
-    registeredOnly: true,
+    scope: {
+        registeredOnly: true
+    },
     params: [{
         name: "url",
         type: status.types.TEXT,
@@ -611,7 +615,9 @@ status.command({
     title: I18n.t('debug_mode_title'),
     description: I18n.t('debug_mode_description'),
     color: "#7099e6",
-    registeredOnly: true,
+    scope: {
+        registeredOnly: true
+    },
     params: [{
         name: "mode",
         suggestions: debugSuggestions,

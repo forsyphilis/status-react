@@ -106,10 +106,10 @@
 
 (defn filter-commands [account {:keys [contacts chat-id] :as chat} commands]
   (->> commands
-       (remove (fn [[_ {:keys [registered-only name]}]]
+       (remove (fn [[_ {:keys [scope name :as c]}]]
                  (and (not (:address account))
                       (not= name "global")
-                      registered-only)))
+                      (:registered-only? scope))))
        ;; TODO: this part should be removed because it's much better to provide the ability to do this in the API
        (map (fn [[k {:keys [name] :as v}]]
               [k (assoc v :hidden? (and (some #{name} ["send" "request"])
