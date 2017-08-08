@@ -15,7 +15,7 @@
 
 (defn image-captured [data]
   (let [path       (.-path data)
-        _ (log/debug "Captured image: " path)
+        _          (log/debug "Captured image: " path)
         on-success (fn [base64]
                      (log/debug "Captured success: " base64)
                      (dispatch [:set-in [:profile-edit :photo-path] (str "data:image/jpeg;base64," base64)])

@@ -181,41 +181,41 @@
          (colorize-status-hashtags status)]]]])])
 
 (defview my-profile []
-  [{:keys [status] :as current-account} [:get-current-account]]
-  [react/view styles/profile
-   [status-bar]
-   [my-profile-toolbar]
-   [react/scroll-view
-    [react/view styles/profile-form
-     [profile-badge current-account]
-     [profile-status status true]]
-    [form-spacer]
-    [react/view actions-list
-     [action-button (label :t/show-qr)
-      :q_r_blue
-      (show-qr current-account :public-key)]]
-    [form-spacer]
-    [react/view styles/profile-info-container
-     [my-profile-info current-account]
-     [bottom-shadow]]]])
+  (letsubs [{:keys [status] :as current-account} [:get-current-account]]
+    [react/view styles/profile
+     [status-bar]
+     [my-profile-toolbar]
+     [react/scroll-view
+      [react/view styles/profile-form
+       [profile-badge current-account]
+       [profile-status status true]]
+      [form-spacer]
+      [react/view actions-list
+       [action-button (label :t/show-qr)
+        :q_r_blue
+        (show-qr current-account :public-key)]]
+      [form-spacer]
+      [react/view styles/profile-info-container
+       [my-profile-info current-account]
+       [bottom-shadow]]]]))
 
 (defview profile []
-  [{:keys [pending?
-           status
-           whisper-identity]
-    :as contact} [:contact]
-   chat-id [:get :current-chat-id]]
-  [react/view styles/profile
-   [status-bar]
-   [profile-toolbar contact]
-   [react/scroll-view
-    [react/view styles/profile-form
-     [profile-badge contact]
-     (when (and (not (nil? status)) (not (string/blank? status)))
-       [profile-status status])]
-    [form-spacer]
-    [profile-actions contact chat-id]
-    [form-spacer]
-    [react/view styles/profile-info-container
-     [profile-info contact]
-     [bottom-shadow]]]])
+  (letsubs [{:keys [pending?
+                    status
+                    whisper-identity]
+             :as contact} [:contact]
+            chat-id [:get :current-chat-id]]
+    [react/view styles/profile
+     [status-bar]
+     [profile-toolbar contact]
+     [react/scroll-view
+      [react/view styles/profile-form
+       [profile-badge contact]
+       (when (and (not (nil? status)) (not (string/blank? status)))
+         [profile-status status])]
+      [form-spacer]
+      [profile-actions contact chat-id]
+      [form-spacer]
+      [react/view styles/profile-info-container
+       [profile-info contact]
+       [bottom-shadow]]]]))

@@ -16,18 +16,18 @@
             [status-im.profile.validations :as validations]
             [status-im.profile.views :refer [colorize-status-hashtags]]
             [status-im.utils.utils :as utils :refer [clean-text]])
-  (:require-macros [status-im.utils.views :refer [defview]]))
+  (:require-macros [status-im.utils.views :refer [defview letsubs]]))
 
 (defn edit-my-profile-toolbar []
   [toolbar {:title   (label :t/edit-profile)
             :actions [{:image :blank}]}])
 
 (defview profile-name-input []
-  [new-profile-name [:get-in [:profile-edit :name]]]
-  [react/view
-   [text-input-with-label {:label          (label :t/name)
-                           :default-value  new-profile-name
-                           :on-change-text #(dispatch [:set-in [:profile-edit :name] %])}]])
+  (letsubs [new-profile-name [:get-in [:profile-edit :name]]]
+    [react/view
+     [text-input-with-label {:label          (label :t/name)
+                             :default-value  new-profile-name
+                             :on-change-text #(dispatch [:set-in [:profile-edit :name] %])}]]))
 
 (def profile-icon-options
   [{:text  (label :t/image-source-gallery)
@@ -85,21 +85,21 @@
       (colorize-status-hashtags (label :t/status-prompt))]]))
 
 (defview edit-my-profile []
-  [current-account [:get-current-account]
-   changed-account [:get :profile-edit]]
-  {:component-will-unmount #(dispatch [:set-in [:profile-edit :edit-status?] false])}
-  (let [profile-edit-data-valid? (spec/valid? ::validations/profile changed-account)
-        profile-edit-data-changed? (or (not= (:name current-account) (:name changed-account))
-                                       (not= (:status current-account) (:status changed-account))
-                                       (not= (:photo-path current-account) (:photo-path changed-account)))]
-    [react/keyboard-avoiding-view {:style styles/profile}
-     [status-bar]
-     [edit-my-profile-toolbar]
-     [react/view styles/edit-my-profile-form
-      [edit-profile-bage changed-account]
-      [edit-profile-status changed-account]
-      [status-prompt changed-account]]
-     (when (and profile-edit-data-changed? profile-edit-data-valid?)
-       [sticky-button (label :t/save) #(do
-                                         (dispatch [:check-status-change (:status changed-account)])
-                                         (dispatch [:account-update changed-account]))])]))
+  (letsubs [current-account [:get-current-account]
+            changed-account [:get :profile-edit]]
+    {:component-will-unmount #(dispatch [:set-in [:profile-edit :edit-status?] false])}
+    (let [profile-edit-data-valid? (spec/valid? ::validations/profile changed-account)
+          profile-edit-data-changed? (or (not= (:name current-account) (:name changed-account))
+                                         (not= (:status current-account) (:status changed-account))
+                                         (not= (:photo-path current-account) (:photo-path changed-account)))]
+      [react/keyboard-avoiding-view {:style styles/profile}
+       [status-bar]
+       [edit-my-profile-toolbar]
+       [react/view styles/edit-my-profile-form
+        [edit-profile-bage changed-account]
+        [edit-profile-status changed-account]
+        [status-prompt changed-account]]
+       (when (and profile-edit-data-changed? profile-edit-data-valid?)
+         [sticky-button (label :t/save) #(do
+                                           (dispatch [:check-status-change (:status changed-account)])
+                                           (dispatch [:account-update changed-account]))])])))
