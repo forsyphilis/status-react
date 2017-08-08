@@ -2,7 +2,7 @@
   (:require [re-frame.core :as re-frame]
             [status-im.components.react :refer [show-image-picker]]
             [status-im.constants :refer [console-chat-id]]
-            [status-im.navigation.handlers :as navigation]
+            [status-im.profile.navigation]
             [status-im.utils.handlers :as handlers]
             [status-im.utils.image-processing :refer [img->base64]]
             [taoensso.timbre :as log]))
@@ -56,10 +56,3 @@
  (handlers/handlers->
   prepare-edit-profile
   open-edit-profile))
-
-(defmethod navigation/preload-data! :qr-code-view
-  [{:keys [current-account-id] :as db} [_ _ {:keys [contact qr-source amount?]}]]
-  (assoc db :qr-modal {:contact   (or contact
-                                      (get-in db [:accounts current-account-id]))
-                       :qr-source qr-source
-                       :amount?   amount?}))
