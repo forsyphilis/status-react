@@ -8,7 +8,7 @@
             [status-im.group.db]
             [status-im.chat.specs]
             [status-im.chat.new-public-chat.db]
-            [status-im.profile.specs]
+            [status-im.profile.db]
             [status-im.transactions.specs]
             [status-im.discover.specs]))
 
